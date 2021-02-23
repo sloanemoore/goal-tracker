@@ -9,7 +9,7 @@ export default function DayTable(props) {
     const addIcon = <FontAwesomeIcon icon={faPlusCircle} />
     const deleteIcon = <FontAwesomeIcon icon={faMinusCircle} />
 
-    console.log(toDoList);
+    // console.log(toDoList);
 
     return (
         <>

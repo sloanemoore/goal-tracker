@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import logo from './logo.svg';
 import './App.css';
 import Header from "./Header.js";
@@ -16,6 +16,31 @@ function App() {
 
   const [daysOfWeekArr, setDaysOfWeekArr] = useState([]);
 
+  // useEffect(() => console.log({toDoList}), [selectedDate]); // may want to add this back in
+
+  useEffect(() => {
+    console.log("selected Date Change", {daysOfWeekArr});
+    toDoList.map(item => {
+      console.log(item.dates);
+      if (item.dates === {}) {
+        let dateObj = {};
+        for (let i=0; i<daysOfWeekArr.length; i++) {
+          let day = daysOfWeekArr[i];
+          dateObj[day] = {
+            dayGoalTime: 0,
+            dayActualTime: 0,
+            dayDone: false,
+            dayChecked: false
+          }
+        }
+        console.log({dateObj});
+      }
+    })
+  }, [selectedDate]);
+
+  useEffect(() => console.log("useEffect", {daysOfWeekArr}))
+  // useEffect(() => console.log({toDoList}))
+
   function handleSelectedDateChange(event) {
     // console.log(event.target.value);
     // console.log(typeof(event.target.value));
@@ -23,21 +48,38 @@ function App() {
   }
 
   function handleAddNewRowClick () {
-    console.log("add new row clicked!")
+    // console.log("add new row clicked!")
     // console.log({toDoList});
     // console.log(typeof(toDoList));
+    let dateObj = {};
+    // console.log({daysOfWeekArr})
+    if (daysOfWeekArr.length !== 0) {
+      for (let i=0; i < daysOfWeekArr.length; i++) {
+        let day = daysOfWeekArr[i];
+        // console.log(day);
+        dateObj[day] = {
+          dayGoalTime: 0,
+          dayActualTime: 0,
+          dayDone: false,
+          dayChecked: false
+          }
+         }
+    }
+    // console.log(dateObj);
     let newItem = {
       task: "",
-      goal: 0,
-      actual: 0,
-      toGo: 0,
-      dates: [],
+      goal: null,
+      actual: null,
+      toGo: null,
+      dates: dateObj,
       key: taskCounter,
     }
     // toDoList.push(newItem);  
     setToDoList([...toDoList, newItem]);
     setTaskCounter(prevCounter => prevCounter + 1);
 }
+
+
 
 function handleEditTask(event, key) {
   // console.log("user edit!");
@@ -52,16 +94,17 @@ function handleEditTask(event, key) {
   setToDoList(toDoList);
   }
 
+
 function handleDeleteIconClick(itemToDelete) {
-  console.log("delete icon clicked!");
+  // console.log("delete icon clicked!");
   // console.log(itemToDelete);
   setToDoList(toDoList.filter(item => item.key !== itemToDelete.key));
   // setToDoList([...toDoList]);
 }
 
-// You need to fix this function!!!
+
 function handleAddIconClick(item) {
-  console.log("add icon clicked!");
+  // console.log("add icon clicked!");
   const taskName = item.task;
   const key = item.key;
   // console.log(taskName);
@@ -74,15 +117,16 @@ function handleAddIconClick(item) {
     setToDoList([...toDoList]);
 }
 
-console.log({toDoList});
-// console.log(taskCounter);
+// console.log({toDoList}); // may want to add this back in
+// console.log({daysOfWeekArr}); // may want to add this back in
+console.log({toDoList}); // may want to add this back in
 
   return (
     <div className="App">
       <h1>To Do App</h1>
       <Header selectedDate={selectedDate} onSelectedDateChange={handleSelectedDateChange}/>
       <WeekTable toDoList={toDoList} onAddToDoItemClick={handleAddNewRowClick} onEditTaskClick={handleEditTask} onDeleteIconClick={handleDeleteIconClick} onAddIconClick={handleAddIconClick}/>
-      <CombinedDayTables selectedDate={selectedDate} daysOfWeekArr={daysOfWeekArr} setDaysOfWeekArr={setDaysOfWeekArr} toDoList={toDoList}/>
+      <CombinedDayTables selectedDate={selectedDate} daysOfWeekArr={daysOfWeekArr} setDaysOfWeekArr={setDaysOfWeekArr} toDoList={toDoList} setToDoList={setToDoList}/>
       {/* <DayTable selectedDate={selectedDate}/> */}
 
     </div>

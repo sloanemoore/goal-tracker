@@ -3,7 +3,7 @@ import React from "react";
 export default function DayTable(props) {
 
     // const selectedDate = props.selectedDate;
-    const {currentDate, toDoList} = props;
+    const {currentDate, toDoList, setToDoList} = props;
     // console.log(currentDay);
     // const tableDate = selectedDate.toDateString();
 
@@ -11,6 +11,42 @@ export default function DayTable(props) {
     // console.log(tableDate);
     // console.log(toDoList);
 
+    function handleGoalEdit (event, key, currentDate) {
+        const newGoalTime = Number(event.target.value);
+        toDoList.map(item => {
+            if (item.key === key) {
+                const datesArr = Object.keys(item.dates);
+                // console.log({datesArr});
+                for (let i=0; i<datesArr.length; i++) {
+                    if (datesArr[i] === currentDate) {
+                        // console.log(datesArr[i]);
+                        item["dates"][datesArr[i]]["dayGoalTime"] = newGoalTime;
+                    }
+                }
+            }
+          })
+        setToDoList(toDoList);
+        // console.log(toDoList);
+    }
+
+
+    function handleActualEdit (event, key, currentDate) {
+        const newActualTime = Number(event.target.value);
+        toDoList.map(item => {
+            if (item.key === key) {
+                const datesArr = Object.keys(item.dates);
+                // console.log({datesArr});
+                for (let i=0; i<datesArr.length; i++) {
+                    if (datesArr[i] === currentDate) {
+                        // console.log(datesArr[i]);
+                        item["dates"][datesArr[i]]["dayActualTime"] = newActualTime;
+                    }
+                }
+            }
+          })
+        setToDoList(toDoList);
+        // console.log(toDoList);
+    }
 
     return (
         <>
@@ -38,16 +74,18 @@ export default function DayTable(props) {
             </thead>
             <tbody>
                 {toDoList.map(item => {
-                    if (item.task !== "")
-                        {return <tr key={item.key}>
+                    if (item.task !== "") {
+                        // console.log(item);
+                        const key = item.key;
+                        return <tr key={item.key}>
                             <td className="taskEntry dailyTaskItem">
                                 {item.task}
                             </td>
                             <td>
-                                <span><input type="text" placeholder="Enter time in min"/></span>
+                                <span><input type="text" placeholder="Enter time in min" value={item.goal} onChange={(event) => handleGoalEdit(event, key, currentDate)}/></span>
                             </td>
                             <td>
-                                <span><input type="text" placeholder="Enter time in min"/></span>
+                                <span><input type="text" placeholder="Enter time in min" value={item.actual} onChange={(event) => handleActualEdit(event, key, currentDate)}/></span>
                             </td>
                             <td>
                                 <label className="container"><input type="checkbox" /><span className="checkmark"></span></label>
