@@ -1,6 +1,7 @@
-import React from "react";
+import React, {useState} from "react";
 
 export default function DayTable(props) {
+    const [errorMessage, setErrorMessage] = useState("");
 
     // const selectedDate = props.selectedDate;
     const {currentDate, toDoList, setToDoList} = props;
@@ -13,38 +14,48 @@ export default function DayTable(props) {
 
     function handleGoalEdit (event, key, currentDate) {
         const newGoalTime = Number(event.target.value);
-        toDoList.map(item => {
-            if (item.key === key) {
-                const datesArr = Object.keys(item.dates);
-                // console.log({datesArr});
-                for (let i=0; i<datesArr.length; i++) {
-                    if (datesArr[i] === currentDate) {
-                        // console.log(datesArr[i]);
-                        item["dates"][datesArr[i]]["dayGoalTime"] = newGoalTime;
+        if (isNaN(newGoalTime)) {
+            setErrorMessage("Please enter a valid number");
+        } else {
+            setErrorMessage("");
+            toDoList.map(item => {
+                if (item.key === key) {
+                    const datesArr = Object.keys(item.dates);
+                    // console.log({datesArr});
+                    for (let i=0; i<datesArr.length; i++) {
+                        if (datesArr[i] === currentDate) {
+                            // console.log(datesArr[i]);
+                            item["dates"][datesArr[i]]["dayGoalTime"] = newGoalTime;
+                        }
                     }
                 }
-            }
-          })
-        setToDoList(toDoList);
-        // console.log(toDoList);
+              })
+            setToDoList(toDoList);
+            // console.log(toDoList);
+        }
     }
 
 
     function handleActualEdit (event, key, currentDate) {
         const newActualTime = Number(event.target.value);
-        toDoList.map(item => {
-            if (item.key === key) {
-                const datesArr = Object.keys(item.dates);
-                // console.log({datesArr});
-                for (let i=0; i<datesArr.length; i++) {
-                    if (datesArr[i] === currentDate) {
-                        // console.log(datesArr[i]);
-                        item["dates"][datesArr[i]]["dayActualTime"] = newActualTime;
+        if (isNaN(newActualTime)) {
+            setErrorMessage("Please enter a valid number");
+        } else {
+            setErrorMessage("");
+            toDoList.map(item => {
+                if (item.key === key) {
+                    const datesArr = Object.keys(item.dates);
+                    // console.log({datesArr});
+                    for (let i=0; i<datesArr.length; i++) {
+                        if (datesArr[i] === currentDate) {
+                            // console.log(datesArr[i]);
+                            item["dates"][datesArr[i]]["dayActualTime"] = newActualTime;
+                        }
                     }
                 }
-            }
-          })
-        setToDoList(toDoList);
+              })
+            setToDoList(toDoList);
+        }
         // console.log(toDoList);
     }
 
@@ -95,6 +106,7 @@ export default function DayTable(props) {
 
             </tbody>
         </table>
+        <span className="error">{errorMessage}</span>
         </>
     )
 }

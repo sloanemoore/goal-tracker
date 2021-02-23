@@ -18,34 +18,87 @@ function App() {
 
   // useEffect(() => console.log({toDoList}), [selectedDate]); // may want to add this back in
 
+
   useEffect(() => {
-    console.log("selected Date Change", {daysOfWeekArr});
-    toDoList.map(item => {
-      console.log(item.dates);
-      if (item.dates === {}) {
-        let dateObj = {};
-        for (let i=0; i<daysOfWeekArr.length; i++) {
-          let day = daysOfWeekArr[i];
-          dateObj[day] = {
-            dayGoalTime: 0,
-            dayActualTime: 0,
-            dayDone: false,
-            dayChecked: false
-          }
+    // console.log({selectedDate});
+    const dateParts = selectedDate.split("-").map((item, i) => {
+        if (i === 1) {
+          return Number(item) -1;
+        } else {
+          return Number(item)
         }
-        console.log({dateObj});
+      });
+    const convertedCurrentDate = new Date(...dateParts);
+    if (!isNaN(convertedCurrentDate)) {
+        const convertedCurrentDate = new Date(...dateParts);
+        // console.log(convertedCurrentDate.toDateString());
+        let weekDates = [convertedCurrentDate.toDateString()];
+        let placeholderToDoList = [...toDoList];
+        for (let i=0; i < 6; i++) {
+            const newDate = new Date (weekDates[i]);
+            const nextNewDate = new Date(newDate);
+            nextNewDate.setDate(newDate.getDate() + 1);
+            weekDates = ([...weekDates, nextNewDate.toDateString()]);
+        }
+    // console.log({weekDates});
+    // this is where new dateObj added to task
+    // console.log("selected Date Change", {weekDates});
+    toDoList.map(item => {
+      // console.log("item dates", item.dates);
+      let dateObj = {};
+      for (let i=0; i<weekDates.length; i++) {
+        let day = weekDates[i];
+        // console.log("weekday Dates", weekDates[i]);
+        dateObj[day] = {
+          dayGoalTime: 0,
+          dayActualTime: 0,
+          dayDone: false,
+          dayChecked: false
+        }
+      }
+      // console.log({dateObj});
+      for (let i=0; i<placeholderToDoList.length; i++) {
+        placeholderToDoList[i]["dates"] = dateObj;
+        // console.log({placeholderToDoList});
       }
     })
-  }, [selectedDate]);
+    setDaysOfWeekArr(weekDates);
+    setToDoList([...placeholderToDoList])
+    }
+  }, [selectedDate]);  
+
+
+  // useEffect(() => {
+  //   console.log("selected Date Change", {daysOfWeekArr});
+  //   toDoList.map(item => {
+  //     console.log(item.dates);
+  //     if (item.dates === {}) {
+  //       let dateObj = {};
+  //       for (let i=0; i<daysOfWeekArr.length; i++) {
+  //         let day = daysOfWeekArr[i];
+  //         dateObj[day] = {
+  //           dayGoalTime: 0,
+  //           dayActualTime: 0,
+  //           dayDone: false,
+  //           dayChecked: false
+  //         }
+  //       }
+  //       console.log({dateObj});
+  //     }
+  //   })
+  // }, [selectedDate]);
 
   useEffect(() => console.log("useEffect", {daysOfWeekArr}))
-  // useEffect(() => console.log({toDoList}))
+  useEffect(() => console.log({toDoList}))
 
   function handleSelectedDateChange(event) {
     // console.log(event.target.value);
     // console.log(typeof(event.target.value));
     setSelectedDate(event.target.value);
   }
+
+
+
 
   function handleAddNewRowClick () {
     // console.log("add new row clicked!")
