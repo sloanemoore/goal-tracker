@@ -101,7 +101,7 @@ function App() {
 
 
   function handleAddNewRowClick () {
-    // console.log("add new row clicked!")
+    // console.log("add new row clicked!");
     // console.log({toDoList});
     // console.log(typeof(toDoList));
     let dateObj = {};
