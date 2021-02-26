@@ -10,7 +10,7 @@ export default function DayTable(props) {
 
     // console.log({selectedDate});
     // console.log({tableDate});
-    console.log("toDoList from DayTable", toDoList);
+    // console.log("toDoList from DayTable", toDoList);
 
     function handleGoalEdit (event, key, currentDate) {
         const newGoalTime = Number(event.target.value);

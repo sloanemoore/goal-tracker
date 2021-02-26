@@ -3,13 +3,32 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlusCircle, faMinusCircle, faTasks } from '@fortawesome/free-solid-svg-icons'
 
 export default function WeekTable(props) {
-    const {toDoList, onAddToDoItemClick, onEditTaskClick, onDeleteIconClick, onAddIconClick} = props;
+    const {toDoList, onAddToDoItemClick, onEditTaskClick, onDeleteIconClick, onInsertIconClick} = props;
 
 
-    const addIcon = <FontAwesomeIcon icon={faPlusCircle} />
+    const insertIcon = <FontAwesomeIcon icon={faPlusCircle} />
     const deleteIcon = <FontAwesomeIcon icon={faMinusCircle} />
 
-    console.log("toDoList from WeekTable", toDoList);
+    // console.log("toDoList from WeekTable", toDoList);
+    let taskTotalGoalTime = [];
+
+    // function totalGoalTime() {
+    //     let placeholderToDoList = [...toDoList];
+    //     console.log(placeholderToDoList);
+    //     for (let item of placeholderToDoList) {
+    //         console.log({item});
+    //         console.log(item.dates);
+    //         for (let date in item.dates) {
+    //             console.log(item.dates[0].dayGoalTime);
+    //         }
+    //         // taskTotalGoalTime.push(item.dates.reduce((acc, item) => acc += item.date.dayGoalTime));
+    //     }
+    // }
+
+    // totalGoalTime();
+
+    // console.log({taskTotalGoalTime});
+
 
     return (
         <>
@@ -44,15 +63,12 @@ export default function WeekTable(props) {
             <tbody>
                 {toDoList.map((item, index) => {
                     const key = item.key;
-                    return <tr key={index}>
+                    return <tr key={key}>
                         <td className="noTableBorder">
-                            <span className="addIcon" onClick={() => onAddIconClick(item)}>{addIcon}</span>
+                            <span className="addIcon" onClick={() => onInsertIconClick(item, index)}>{insertIcon}</span>
                         </td>
                         <td className="taskEntry">
-                            <span><input type="text" placeholder="Add a task" defaultValue={item.task} key={key} onChange={(event) => {
-                                onEditTaskClick(event, key);
-                                console.log("toDoList from taskEntry-toDoList.map", toDoList);
-                                }}/></span>
+                            <span><input type="text" placeholder="Add a task" defaultValue={item.task} key={key} onChange={(event) => onEditTaskClick(event, key)}/></span>
                         </td>
                         {/* <td className="taskEntry">
                             <span><input type="text" placeholder="Add a task" defaultValue={item.task} key={key} onChange={(event) => onEditTaskClick(event, key)}/></span>

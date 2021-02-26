@@ -89,15 +89,13 @@ function App() {
   // }, [selectedDate]);
 
   // useEffect(() => console.log("useEffect", {daysOfWeekArr}))
-  useEffect(() => console.log("toDoList from App", {toDoList}), [toDoList]);
+  // useEffect(() => console.log("toDoList from App", {toDoList}), [toDoList]);
 
   function handleSelectedDateChange(event) {
     // console.log(event.target.value);
     // console.log(typeof(event.target.value));
     setSelectedDate(event.target.value);
   }
-
-
 
 
   function handleAddNewRowClick () {
@@ -165,23 +163,130 @@ function handleDeleteIconClick(itemToDelete) {
 }
 
 
-function handleAddIconClick(item) {
-  // console.log("add icon clicked!");
-  const taskName = item.task;
+function handleInsertIconClick(item, index) {
   const key = item.key;
+  const insertIndex = index;
+  console.log({toDoList});
+  console.log({insertIndex});
+  let dateObj = {};
+  // console.log({daysOfWeekArr})
+  if (daysOfWeekArr.length !== 0) {
+    for (let i=0; i < daysOfWeekArr.length; i++) {
+      let day = daysOfWeekArr[i];
+      // console.log(day);
+      dateObj[day] = {
+        dayGoalTime: 0,
+        dayActualTime: 0,
+        dayDone: false,
+        dayChecked: false
+        }
+       }
+  }
+  let newItem = {
+    task: "",
+    goal: null,
+    actual: null,
+    toGo: null,
+    dates: dateObj,
+    key: taskCounter,
+  }
+  let placeholderToDoList;
+  for (let i=0; i<toDoList.length; i++) {
+      // console.log({item});
+      // console.log({i});
+      // console.log({newItem});
+      if (insertIndex === 0) {
+        // console.log("debug", [newItem, ...toDoList])
+        placeholderToDoList = ([newItem, ...toDoList])
+      } else if (insertIndex === i) {
+          const firstPart = toDoList.slice(0, insertIndex);
+          const secondPart = toDoList.slice(insertIndex);
+          // console.log({firstPart});
+          // console.log({secondPart});
+          placeholderToDoList = ([...firstPart, newItem, ...secondPart]);
+    };
+    setToDoList(placeholderToDoList);
+    setTaskCounter(prevCounter => prevCounter + 1);
+  }
+}
+
+
+// this is the function that *almost* works
+// function handleAddIconClick(item, index) {
+//   const key = item.key;
+//   const insertIndex = index;
+//   console.log({toDoList});
+//   console.log({index});
+//   let dateObj = {};
+//   // console.log({daysOfWeekArr})
+//   if (daysOfWeekArr.length !== 0) {
+//     for (let i=0; i < daysOfWeekArr.length; i++) {
+//       let day = daysOfWeekArr[i];
+//       // console.log(day);
+//       dateObj[day] = {
+//         dayGoalTime: 0,
+//         dayActualTime: 0,
+//         dayDone: false,
+//         dayChecked: false
+//         }
+//        }
+//   }
+//   let newItem = {
+//     task: "",
+//     goal: null,
+//     actual: null,
+//     toGo: null,
+//     dates: dateObj,
+//     key: taskCounter,
+//   }
+//   const debug = toDoList.map((item, currentIndex) => {
+//     console.log({item});
+//     console.log({currentIndex});
+//     console.log({newItem});
+//     if (insertIndex === 0) {
+//       console.log("debug", [newItem, ...toDoList])
+//       return ([newItem, ...toDoList])
+//     } else if (insertIndex === currentIndex) {
+//         const firstPart = toDoList.slice(0, insertIndex);
+//         const secondPart = toDoList.slice(insertIndex);
+//         console.log({firstPart});
+//         console.log({secondPart});
+//         return ([...firstPart, newItem, ...secondPart]);
+//     }
+//   });
+//   console.log({debug});
+
   // console.log(taskName);
   // console.log(key);
-  setToDoList(toDoList.map(item => {
-      if (item.key === key) {
-        const newTask = {...item, task: taskName};
-        // newTask.task = taskName;
-        return newTask;
-      } else {
-        return item;
-      }
-    }));
-    // setToDoList([...toDoList]);
-}
+  // setToDoList(toDoList.map(item => {
+  //     if (item.key === key) {
+  //       const newTask = {...item, task: taskName};
+  //       // newTask.task = taskName;
+  //       return newTask;
+  //     } else {
+  //       return item;
+  //     }
+  //   }));
+// }
+
+
+// this is the old functionality where you click the addIcon to add a task
+// function handleAddIconClick(item) {
+//   // console.log("add icon clicked!");
+//   const taskName = item.task;
+//   const key = item.key;
+//   // console.log(taskName);
+//   // console.log(key);
+//   setToDoList(toDoList.map(item => {
+//       if (item.key === key) {
+//         const newTask = {...item, task: taskName};
+//         // newTask.task = taskName;
+//         return newTask;
+//       } else {
+//         return item;
+//       }
+//     }));
+// }
 
 // console.log({toDoList}); // may want to add this back in
 // console.log({daysOfWeekArr}); // may want to add this back in
@@ -191,7 +296,7 @@ function handleAddIconClick(item) {
     <div className="App">
       <h1>To Do App</h1>
       <Header selectedDate={selectedDate} onSelectedDateChange={handleSelectedDateChange}/>
-      <WeekTable toDoList={toDoList} onAddToDoItemClick={handleAddNewRowClick} onEditTaskClick={handleEditTask} onDeleteIconClick={handleDeleteIconClick} onAddIconClick={handleAddIconClick}/>
+      <WeekTable toDoList={toDoList} onAddToDoItemClick={handleAddNewRowClick} onEditTaskClick={handleEditTask} onDeleteIconClick={handleDeleteIconClick} onInsertIconClick={handleInsertIconClick}/>
       <CombinedDayTables selectedDate={selectedDate} daysOfWeekArr={daysOfWeekArr} setDaysOfWeekArr={setDaysOfWeekArr} toDoList={toDoList} setToDoList={setToDoList}/>
       {/* <DayTable selectedDate={selectedDate}/> */}
 
