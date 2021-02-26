@@ -2,14 +2,14 @@ import React, {useState} from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlusCircle, faMinusCircle, faTasks } from '@fortawesome/free-solid-svg-icons'
 
-export default function DayTable(props) {
+export default function WeekTable(props) {
     const {toDoList, onAddToDoItemClick, onEditTaskClick, onDeleteIconClick, onAddIconClick} = props;
 
 
     const addIcon = <FontAwesomeIcon icon={faPlusCircle} />
     const deleteIcon = <FontAwesomeIcon icon={faMinusCircle} />
 
-    // console.log(toDoList);
+    console.log("toDoList from WeekTable", toDoList);
 
     return (
         <>
@@ -49,8 +49,14 @@ export default function DayTable(props) {
                             <span className="addIcon" onClick={() => onAddIconClick(item)}>{addIcon}</span>
                         </td>
                         <td className="taskEntry">
-                            <span><input type="text" placeholder="Add a task" defaultValue={item.task} key={key} onChange={(event) => onEditTaskClick(event, key)}/></span>
+                            <span><input type="text" placeholder="Add a task" defaultValue={item.task} key={key} onChange={(event) => {
+                                onEditTaskClick(event, key);
+                                console.log("toDoList from taskEntry-toDoList.map", toDoList);
+                                }}/></span>
                         </td>
+                        {/* <td className="taskEntry">
+                            <span><input type="text" placeholder="Add a task" defaultValue={item.task} key={key} onChange={(event) => onEditTaskClick(event, key)}/></span>
+                        </td> */}
                         <td className="weekCalculatedItem">
                             {item.goal}
                         </td>

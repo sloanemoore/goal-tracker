@@ -88,8 +88,8 @@ function App() {
   //   })
   // }, [selectedDate]);
 
-  useEffect(() => console.log("useEffect", {daysOfWeekArr}))
-  useEffect(() => console.log({toDoList}))
+  // useEffect(() => console.log("useEffect", {daysOfWeekArr}))
+  useEffect(() => console.log("toDoList from App", {toDoList}), [toDoList]);
 
   function handleSelectedDateChange(event) {
     // console.log(event.target.value);
@@ -133,18 +133,27 @@ function App() {
 }
 
 
-
+// need to fix this function so that setToDoList takes toDoList.map
 function handleEditTask(event, key) {
   // console.log("user edit!");
   const newTaskName = event.target.value;
   // console.log(newTaskName);
-  // console.log(key);
-  toDoList.map(item => {
+  // // console.log(key);
+  const placeholderToDoList = toDoList.map(item => {
       if (item.key === key) {
         item.task = newTaskName;
+        return item;
+      } else {
+        return item;
       }
-    })
-  setToDoList(toDoList);
+    });
+  setToDoList(placeholderToDoList);
+  // setToDoList(toDoList.map(item => {
+  //   if (item.key === key) {
+  //     item.task = newTaskName;
+  //   }
+  //   console.log("toDoList from handleEditTask", toDoList);
+  // }));
   }
 
 
@@ -162,17 +171,21 @@ function handleAddIconClick(item) {
   const key = item.key;
   // console.log(taskName);
   // console.log(key);
-  toDoList.map(item => {
+  setToDoList(toDoList.map(item => {
       if (item.key === key) {
-        item.task = taskName;
+        const newTask = {...item, task: taskName};
+        // newTask.task = taskName;
+        return newTask;
+      } else {
+        return item;
       }
-    })
-    setToDoList([...toDoList]);
+    }));
+    // setToDoList([...toDoList]);
 }
 
 // console.log({toDoList}); // may want to add this back in
 // console.log({daysOfWeekArr}); // may want to add this back in
-console.log({toDoList}); // may want to add this back in
+// console.log({toDoList}); // may want to add this back in
 
   return (
     <div className="App">

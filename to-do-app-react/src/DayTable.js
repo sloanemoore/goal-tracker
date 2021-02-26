@@ -8,9 +8,9 @@ export default function DayTable(props) {
     // console.log(currentDay);
     // const tableDate = selectedDate.toDateString();
 
-    // console.log(selectedDate);
-    // console.log(tableDate);
-    // console.log(toDoList);
+    // console.log({selectedDate});
+    // console.log({tableDate});
+    console.log("toDoList from DayTable", toDoList);
 
     function handleGoalEdit (event, key, currentDate) {
         const newGoalTime = Number(event.target.value);
@@ -85,7 +85,7 @@ export default function DayTable(props) {
             </thead>
             <tbody>
                 {toDoList.map(item => {
-                    if (item.task !== "") {
+                    // if (item.task !== "") {
                         // console.log(item);
                         const key = item.key;
                         return <tr key={item.key}>
@@ -102,7 +102,8 @@ export default function DayTable(props) {
                                 <label className="container"><input type="checkbox" /><span className="checkmark"></span></label>
                             </td>
                         </tr>}
-                    })}
+                    // }
+                    )}
 
             </tbody>
         </table>
