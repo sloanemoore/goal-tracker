@@ -1,6 +1,23 @@
 import React, {useState, useEffect} from "react";
 import DayTable from "./DayTable.js";
 
+// you'll need to include this function into all components
+function deepFreeze (o) {
+    Object.freeze(o);
+  
+    Object.getOwnPropertyNames(o).forEach(function (prop) {
+      if (o.hasOwnProperty(prop)
+      && o[prop] !== null
+      && (typeof o[prop] === "object" || typeof o[prop] === "function")
+      && !Object.isFrozen(o[prop])) {
+        deepFreeze(o[prop]);
+      }
+    });
+    
+    return o;
+  };
+
+
 export default function CombinedDayTables(props) {
     const {selectedDate, toDoList, setToDoList, daysOfWeekArr, setDaysOfWeekArr} = props;
 
