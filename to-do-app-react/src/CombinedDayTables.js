@@ -53,7 +53,7 @@ export default function CombinedDayTables(props) {
         {/* {!isNaN(convertedCurrentDate) && "hi!"} */}
         {daysOfWeekArr.length !== 0 && daysOfWeekArr.map((day, i) => {
             // console.log(day);
-            return <DayTable currentDate={day} key={i} toDoList={toDoList} setToDoList={setToDoList}/>
+            return <DayTable currentDate={day} index={i} toDoList={toDoList} setToDoList={setToDoList}/>
         })}
         </>
     )

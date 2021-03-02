@@ -106,7 +106,7 @@ export default function WeekTable(props) {
                             {item.actual}
                         </td>
                         <td className="weekCalculatedItem">
-                            {item.toGo}
+                            {item.goal !== "" && item.actual !== "" && item.goal - item.actual}
                         </td>
                         <td className="noTableBorder">
                             <span className="deleteIcon" onClick={() => onDeleteIconClick(item)}>{deleteIcon}</span>
