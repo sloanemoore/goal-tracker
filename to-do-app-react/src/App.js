@@ -25,17 +25,38 @@ function deepFreeze (o) {
 // console.log(Object.assign(deepFreeze({}), {a: 1}));
 
 function App() {
-  const [selectedDate, setSelectedDate] = useState(new Date().toDateString());
+  const [selectedDate, setSelectedDate] = useState(() => {
+    const placeholderSelectedDate = JSON.parse(localStorage.getItem("selectedDate"));
+    if (placeholderSelectedDate) {
+      return placeholderSelectedDate;
+    } else {
+      return new Date().toDateString();
+    }
+  });
+
   // const [selectedDate, setSelectedDate] = useState(new Date().toISOString().slice(0, 10));
   // console.log(selectedDate);
 
-  const [toDoList, setToDoList] = useState([]);
+  const [toDoList, setToDoList] = useState(() => {
+    const placeholderToDoList = JSON.parse(localStorage.getItem("toDoList"));
+    if (placeholderToDoList) {
+      return placeholderToDoList;
+    }
+    else {
+      return [];
+    }
+  });
 
   const [taskCounter, setTaskCounter] = useState(0);
 
   const [daysOfWeekArr, setDaysOfWeekArr] = useState([]);
 
   // useEffect(() => console.log({toDoList}), [selectedDate]); // may want to add this back in
+
+
+  useEffect(() => localStorage.setItem("toDoList", JSON.stringify(toDoList)), [toDoList]);
+
+  useEffect(() => localStorage.setItem("selectedDate", JSON.stringify(selectedDate)), [selectedDate]);
 
 
   useEffect(() => {
@@ -99,68 +120,10 @@ function App() {
 }, [selectedDate]);
   
 
-  // start this is the original function (combined datesArr and setting setDaysOfWeekArr and setToDoList)
 
-//   toDoList.map(item => {
-//     // console.log("item dates", item.dates);
-//     let datesArr = [];
-//     let dateObj = {};
-//     for (let i=0; i<weekDates.length; i++) {
-//       let day = weekDates[i];
-//       // console.log("weekday Dates", weekDates[i]);
-//       // console.log({day});
-//       dateObj[day] = {
-//         dayGoalTime: 0,
-//         dayActualTime: 0,
-//         dayDone: false,
-//         dayChecked: false
-//       }
-//       datesArr.push({[day]: dateObj[day]})
-//     }
-//     // console.log({datesArr});
-//     console.log({datesArr});
-//     for (let i=0; i<placeholderToDoList.length; i++) {
-//       const item = placeholderToDoList[i];
-//       console.log({item});
-//       const newItem = {...item, dates: datesArr}// come back to this
-//       // placeholderToDoList[i]["dates"] = datesArr;
-//       // console.log({placeholderToDoList});
-//       console.log({newItem}); // come back to this
-//     }
-//   })
-//   setDaysOfWeekArr(weekDates);
-//   setToDoList([...placeholderToDoList]);
-//   }
-// }, [selectedDate]);  
+  // useEffect(() => console.log("toDoList from App", {toDoList}));
 
-
-  // end this is the original function
-
-
-  // useEffect(() => {
-  //   console.log("selected Date Change", {daysOfWeekArr});
-  //   toDoList.map(item => {
-  //     console.log(item.dates);
-  //     if (item.dates === {}) {
-  //       let dateObj = {};
-  //       for (let i=0; i<daysOfWeekArr.length; i++) {
-  //         let day = daysOfWeekArr[i];
-  //         dateObj[day] = {
-  //           dayGoalTime: 0,
-  //           dayActualTime: 0,
-  //           dayDone: false,
-  //           dayChecked: false
-  //         }
-  //       }
-  //       console.log({dateObj});
-  //     }
-  //   })
-  // }, [selectedDate]);
-
-  // useEffect(() => console.log("useEffect", {daysOfWeekArr}))
-  useEffect(() => console.log("toDoList from App", {toDoList}));
-
-  console.log({toDoList})
+  // console.log({toDoList})
 
   function handleSelectedDateChange(event) {
     // console.log(event.target.value);
@@ -185,27 +148,18 @@ function App() {
         dateObj[day] = {
           dayGoalTime: 0,
           dayActualTime: 0,
+          dayNotes: "",
           dayDone: false,
           dayChecked: false
         }
         datesArr.push({[day]: dateObj[day]})
       }
-        // let day = daysOfWeekArr[i];
-        // // console.log(day);
-        // dateObj[day] = {
-        //   dayGoalTime: 0,
-        //   dayActualTime: 0,
-        //   dayDone: false,
-        //   dayChecked: false
-        //   }
-        //  }
     }
     // console.log(dateObj);
     let newItem = {
       task: "",
       goal: "",
       actual: null,
-      toGo: null,
       dates: datesArr,
       key: taskCounter,
     }
@@ -229,12 +183,6 @@ function handleEditTask(event, key) {
       }
     });
   setToDoList(deepFreeze(placeholderToDoList));
-  // setToDoList(toDoList.map(item => {
-  //   if (item.key === key) {
-  //     item.task = newTaskName;
-  //   }
-  //   console.log("toDoList from handleEditTask", toDoList);
-  // }));
   }
 
 
@@ -261,6 +209,7 @@ function handleInsertIconClick(item, index) {
       dateObj[day] = {
         dayGoalTime: 0,
         dayActualTime: 0,
+        dayNotes: "",
         dayDone: false,
         dayChecked: false
         }
@@ -271,7 +220,6 @@ function handleInsertIconClick(item, index) {
     task: "",
     goal: "",
     actual: null,
-    toGo: null,
     dates: datesArr,
     key: taskCounter,
   }
@@ -280,130 +228,25 @@ function handleInsertIconClick(item, index) {
       // console.log({item});
       // console.log({i});
       // console.log({newItem});
+      console.log({i});
+      console.log({insertIndex})
       if (insertIndex === 0) {
         // console.log("debug", [newItem, ...toDoList])
         placeholderToDoList = ([newItem, ...toDoList])
       } else if (insertIndex === i) {
           const firstPart = toDoList.slice(0, insertIndex);
           const secondPart = toDoList.slice(insertIndex);
-          // console.log({firstPart});
-          // console.log({secondPart});
+          console.log({firstPart});
+          console.log({secondPart});
           placeholderToDoList = ([...firstPart, newItem, ...secondPart]);
-    };
+      } else {
+        continue;
+      };
     setToDoList(deepFreeze(placeholderToDoList));
     setTaskCounter(deepFreeze(prevCounter => prevCounter + 1));
   }
 }
 
-    //this function produces the right output, but doesn't set the state
-    function totalGoalTime() {
-      let placeholderToDoList = [];
-      // console.log(placeholderToDoList);
-      for (let i=0; i< toDoList.length; i++) {
-          const item = toDoList[i];
-          console.log({item});
-          console.log("item dates: ", item.dates);
-          let tempGoalTotal = 0;
-          // console.log({day});
-          // console.log(item.dates.dayGoalTime);
-          for (let i=0; i< item.dates.length; i++) {
-              const day = Object.keys(item.dates[i])[0]; 
-              tempGoalTotal += Number(item.dates[i][day].dayGoalTime);
-              // console.log(day);
-              // console.log("dayGoalTime: ", item.dates[i][day].dayGoalTime);
-              // let taskTotalGoaltime = item.dates.reduce((acc, date) => acc += Number(item.dates[i][day].dayGoalTime), 0);
-          }
-          console.log(tempGoalTotal);
-          const updatedItem = {...item, goal: tempGoalTotal};
-          console.log({updatedItem});
-          placeholderToDoList.push(updatedItem);
-  //         // taskTotalGoalTime.push(item.dates.reduce((acc, item) => acc += item.date.dayGoalTime));
-      } 
-      console.log(placeholderToDoList)
-      setToDoList(deepFreeze(placeholderToDoList));
-  }
-
-
-// this is the function that *almost* works
-// function handleAddIconClick(item, index) {
-//   const key = item.key;
-//   const insertIndex = index;
-//   console.log({toDoList});
-//   console.log({index});
-//   let dateObj = {};
-//   // console.log({daysOfWeekArr})
-//   if (daysOfWeekArr.length !== 0) {
-//     for (let i=0; i < daysOfWeekArr.length; i++) {
-//       let day = daysOfWeekArr[i];
-//       // console.log(day);
-//       dateObj[day] = {
-//         dayGoalTime: 0,
-//         dayActualTime: 0,
-//         dayDone: false,
-//         dayChecked: false
-//         }
-//        }
-//   }
-//   let newItem = {
-//     task: "",
-//     goal: null,
-//     actual: null,
-//     toGo: null,
-//     dates: dateObj,
-//     key: taskCounter,
-//   }
-//   const debug = toDoList.map((item, currentIndex) => {
-//     console.log({item});
-//     console.log({currentIndex});
-//     console.log({newItem});
-//     if (insertIndex === 0) {
-//       console.log("debug", [newItem, ...toDoList])
-//       return ([newItem, ...toDoList])
-//     } else if (insertIndex === currentIndex) {
-//         const firstPart = toDoList.slice(0, insertIndex);
-//         const secondPart = toDoList.slice(insertIndex);
-//         console.log({firstPart});
-//         console.log({secondPart});
-//         return ([...firstPart, newItem, ...secondPart]);
-//     }
-//   });
-//   console.log({debug});
-
-  // console.log(taskName);
-  // console.log(key);
-  // setToDoList(toDoList.map(item => {
-  //     if (item.key === key) {
-  //       const newTask = {...item, task: taskName};
-  //       // newTask.task = taskName;
-  //       return newTask;
-  //     } else {
-  //       return item;
-  //     }
-  //   }));
-// }
-
-
-// this is the old functionality where you click the addIcon to add a task
-// function handleAddIconClick(item) {
-//   // console.log("add icon clicked!");
-//   const taskName = item.task;
-//   const key = item.key;
-//   // console.log(taskName);
-//   // console.log(key);
-//   setToDoList(toDoList.map(item => {
-//       if (item.key === key) {
-//         const newTask = {...item, task: taskName};
-//         // newTask.task = taskName;
-//         return newTask;
-//       } else {
-//         return item;
-//       }
-//     }));
-// }
-
-// console.log({toDoList}); // may want to add this back in
-// console.log({daysOfWeekArr}); // may want to add this back in
-// console.log({toDoList}); // may want to add this back in
 
   return (
     <div className="App">
@@ -411,7 +254,6 @@ function handleInsertIconClick(item, index) {
       <Header selectedDate={selectedDate} onSelectedDateChange={handleSelectedDateChange}/>
       <WeekTable toDoList={toDoList} setToDoList={setToDoList} onAddToDoItemClick={handleAddNewRowClick} onEditTaskClick={handleEditTask} onDeleteIconClick={handleDeleteIconClick} onInsertIconClick={handleInsertIconClick}/>
       <CombinedDayTables selectedDate={selectedDate} daysOfWeekArr={daysOfWeekArr} setDaysOfWeekArr={setDaysOfWeekArr} toDoList={toDoList} setToDoList={setToDoList}/>
-      {/* <DayTable selectedDate={selectedDate}/> */}
 
     </div>
   );

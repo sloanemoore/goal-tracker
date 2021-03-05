@@ -19,12 +19,13 @@ function deepFreeze (o) {
 
 
 export default function Header(props) {
+    const {selectedDate} = props;
 
     return (
         <>
         <div className="inline weekHeader">
             <h2 className="inline">Week of</h2>
-            <input className="inline dateField" selectedDate={props.selectedDate} type="date" onChange={props.onSelectedDateChange}/>
+            <input className="inline dateField" selecteddate={selectedDate} type="date" onChange={props.onSelectedDateChange}/>
         </div>
 
         </>

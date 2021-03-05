@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 
 // you'll need to include this function into all components
 function deepFreeze (o) {
@@ -23,6 +23,8 @@ export default function DayTable(props) {
 
     const {currentDate, toDoList, setToDoList, index} = props;
 
+    console.log("currentDate from DayTable: ", currentDate);
+
 
     function handleGoalEdit (event, key, currentDate) {
         let placeholderToDoList;
@@ -37,10 +39,10 @@ export default function DayTable(props) {
                         const day = Object.keys(item.dates[i])[0];
                         if (day === currentDate) {
                             const dateItem = {...item.dates[i][day]};
-                            const updatedDateItem = {...dateItem, dayGoalTime: newGoalTime};
+                            const newDayDone = dateItem.dayActualTime > dateItem.newGoalTime; // this is the line I changed most recently
+                            const updatedDateItem = {...dateItem, dayGoalTime: newGoalTime, dayDone: newDayDone}; // I changed this line, too
                             console.log({updatedDateItem});
                             const newDates = [...item.dates];
-                            const index = i;
                             newDates[i] = {[day]: updatedDateItem};
                             const newItem = {...item, dates: newDates};
                             return newItem;
@@ -82,10 +84,9 @@ export default function DayTable(props) {
                         const day = Object.keys(item.dates[i])[0];
                         if (day === currentDate) {
                             const dateItem = {...item.dates[i][day]};
-                            const updatedDateItem = {...dateItem, dayActualTime: newActualTime};
-                            console.log({updatedDateItem});
+                            const newDayDone = newActualTime > dateItem.dayGoalTime; // this is the line I changed most recently
+                            const updatedDateItem = {...dateItem, dayActualTime: newActualTime, dayDone: newDayDone}; // I changed this line, too
                             const newDates = [...item.dates];
-                            const index = i;
                             newDates[i] = {[day]: updatedDateItem};
                             const newItem = {...item, dates: newDates};
                             return newItem;
@@ -113,6 +114,26 @@ export default function DayTable(props) {
     ));
     }
 
+    function handleCheckboxClick(event, key, currentDate) {
+        const dayTaskChecked = event.target.checked;
+        let placeholderToDoList = toDoList.map(item => {
+            if (item.key === key) {
+                for (let i=0; i<item.dates.length; i++) {
+                    const day = Object.keys(item.dates[i])[0];
+                    if (day === currentDate) {
+                        const updatedDayObj = {...item.dates[i][day], dayChecked: dayTaskChecked};
+                        const updatedDates = [...item.dates];
+                        updatedDates[i] = {[day]: updatedDayObj};
+                        const updatedItem = {...item, dates: updatedDates}
+                        return updatedItem
+                    }
+                }
+            } else {
+                return item;
+            }
+        })
+        setToDoList(deepFreeze(placeholderToDoList));
+    }
 
     
     return (
@@ -141,22 +162,9 @@ export default function DayTable(props) {
             </thead>
             <tbody>
                 {toDoList.map(item => {
-                    // if (item.task !== "") {
-                        // console.log(item);
                         const key = item.key;
                         const dayGoalTime = "";
                         const dayActualTime = "";
-                        // let dayIndex;
-                        // let day;
-                        // for (let i=0; i< item.dates.length; i++) {
-                        //     dayIndex = i;
-                        //     day = Object.keys(item.dates[i])[0];
-                        //     console.log({dayIndex});
-                        //     console.log({day});
-                        //     console.log("dayPart: ", item.dates[dayIndex])
-                        // }
-                        // console.log("dayGoalTime", currentDate, item.dates[dayIndex][currentDate].dayGoalTime);
-                        // console.log({currentDate});
                         return <tr key={item.key}>
                             <td className="taskEntry dailyTaskItem">
                                 {item.task}
@@ -168,10 +176,9 @@ export default function DayTable(props) {
                                 <span><input type="text" placeholder="Enter time in min" defaultValue={dayActualTime} onChange={(event) => handleActualEdit(event, key, currentDate)}/></span>
                             </td>
                             <td>
-                                {item.dates[index][currentDate].dayActualTime > item.dates[index][currentDate].dayGoalTime && <label className="container"><input type="checkbox" /><span className="checkmark"></span></label>}
+                                {item.dates[index][currentDate].dayActualTime!=="" && item.dates[index][currentDate].dayGoalTime!== 0 && item.dates[index][currentDate].dayActualTime >= item.dates[index][currentDate].dayGoalTime && <label className="container"><input type="checkbox" onClick={(event) => handleCheckboxClick(event, key, currentDate)}/><span className="checkmark"></span></label>}
                             </td>
                         </tr>}
-                    // }
                     )}
 
             </tbody>

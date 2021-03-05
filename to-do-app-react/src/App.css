@@ -65,6 +65,15 @@ span input {
   text-align: left;
 }
 
+.notesEntry {
+  width: 300px;
+}
+
+.notesEntry span input {
+  width: 300px;
+  text-align: left;
+}
+
 .dailyTaskItem {
   font-size: 13.3333px;
   text-align: left;
@@ -110,12 +119,36 @@ input:hover {
 }
 
 .error {
-  color: #f09c9a;
+  color: #ff00ff;
   margin-top: -100px;
+}
+
+.goalNotMet {
+  color: #ff00ff;
+  font-weight: bold;
+}
+
+.goalMet {
+  color: #33a854;
+  font-weight: bold;
 }
 
 input[type="text"]:disabled {
   background-color: #ffffff;
+}
+
+.flexContainer {
+  display: flex;
+  margin-left: 60px;
+  margin-right: 60px;
+}
+
+.flexMain {
+  flex: 3;
+}
+
+.flexSide {
+  flex: 1;
 }
 
 /* This is the checkmark */
@@ -190,7 +223,7 @@ input[type="text"]:disabled {
 /* Checkmark ends */
 
 /* ------------------------------- */
-
+/* 
 .App-logo {
   height: 40vmin;
   pointer-events: none;
@@ -224,4 +257,4 @@ input[type="text"]:disabled {
   to {
     transform: rotate(360deg);
   }
-}
+} */
