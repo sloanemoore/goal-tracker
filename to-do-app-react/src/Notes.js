@@ -72,13 +72,14 @@ export default function Notes(props) {
 			</tr>
             </thead>
                 <tbody>
-                    {toDoList.map((item, index) => {
+                    {toDoList.map(item => {
                         const key = item.key;
+                        const day = Object.keys(item.dates[index])[0];
                         // console.log({key})
 
                         return <tr key={key}>
                             <td className="notesEntry">
-                                <span><input type="text" placeholder="Add a note" defaultValue={item.note} key={key} onChange={(event) => handleNotesEdit(event, key)}/></span>
+                                <span><input type="text" placeholder="Add a note" value={item.dates[index][currentDate].dayNotes} key={key} onChange={(event) => handleNotesEdit(event, key)}/></span>
                             </td>
                         </tr>
                     })

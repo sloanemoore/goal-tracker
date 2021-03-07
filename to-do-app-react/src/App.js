@@ -47,79 +47,204 @@ function App() {
     }
   });
 
-  const [taskCounter, setTaskCounter] = useState(0);
+  const [taskCounter, setTaskCounter] = useState(() => {
+    const placeholderTaskCounter = JSON.parse(localStorage.getItem("taskCounter"));
+    if (placeholderTaskCounter) {
+      return placeholderTaskCounter;
+    }
+    else {
+      return 0;
+    }
+  });
 
-  const [daysOfWeekArr, setDaysOfWeekArr] = useState([]);
+  const [daysOfWeekArr, setDaysOfWeekArr] = useState(() => {
+    const placeholderDaysOfWeekArr = JSON.parse(localStorage.getItem("daysOfWeekArr"));
+    if (placeholderDaysOfWeekArr) {
+      return placeholderDaysOfWeekArr;
+    }
+    else {
+      return [];
+    }
+  });
+
 
   // useEffect(() => console.log({toDoList}), [selectedDate]); // may want to add this back in
 
 
-  useEffect(() => localStorage.setItem("toDoList", JSON.stringify(toDoList)), [toDoList]);
+  useEffect(() => localStorage.setItem("toDoList", JSON.stringify(toDoList)), [toDoList, selectedDate, daysOfWeekArr]);
 
   useEffect(() => localStorage.setItem("selectedDate", JSON.stringify(selectedDate)), [selectedDate]);
 
+  useEffect(() => localStorage.setItem("taskCounter", JSON.stringify(taskCounter)), [taskCounter]);
+
+  useEffect(() => localStorage.setItem("daysOfWeekArr", JSON.stringify(daysOfWeekArr)), [daysOfWeekArr, selectedDate]);
 
   useEffect(() => {
     // console.log({selectedDate});
+    // start commented section
+    // let enteredData;
+    //  if there is data entered in the daily section of the toDoList, then skip the below if statement-- this goes to the else statement
+    // for (let i=0; i<toDoList.length; i++) {
+    //   const item = toDoList[i];
+    //   const dates = item.dates;
+    //   if (item.dates) {
+    //     for (let j=0; j<dates.length; j++) {
+    //       const day = Object.keys(dates[j])[0];
+    //       const dayGoalTime = item.dates[j][day].dayGoalTime;
+    //       const dayActualTime = item.dates[j][day].dayActualTime;
+    //       const dayNotes = item.dates[j][day].dayNotes;
+    //       if (dayGoalTime || dayActualTime || dayNotes) {
+    //       enteredData = true;
+    //       }
+    //     }
+    //   }
+    // }
+    // console.log({enteredData});
+
+
+    // if (toDoList.length === 0 || toDoList[0] || !toDoList[0].dates.length) { // you may need to add this line back in
+
+
+    // if (!isNaN(selectedDate)) {
+        // const convertedCurrentDate = new Date(...dateParts);
+    // end commented section
+    console.log({selectedDate});
+    let weekDates;
     const dateParts = selectedDate.split("-").map((item, i) => {
-        if (i === 1) {
-          return Number(item) -1;
-        } else {
-          return Number(item)
-        }
-      });
-    const convertedCurrentDate = new Date(...dateParts);
-    if (!isNaN(convertedCurrentDate)) {
-        const convertedCurrentDate = new Date(...dateParts);
-        // console.log(convertedCurrentDate.toDateString());
-        let weekDates = [convertedCurrentDate.toDateString()];
-        // let placeholderToDoList = [...toDoList];
-        for (let i=0; i < 6; i++) {
-            const newDate = new Date (weekDates[i]);
-            const nextNewDate = new Date(newDate);
-            nextNewDate.setDate(newDate.getDate() + 1);
-            weekDates = ([...weekDates, nextNewDate.toDateString()]);
-        }
-    // console.log({weekDates});
-    // this is where new dateObj added to task
-    // console.log("selected Date Change", {weekDates});
-    
+      if (i === 1) {
+        return Number(item) -1;
+      } else {
+        return Number(item)
+      }
+    });
+  const convertedCurrentDate = new Date(...dateParts);
+  console.log({convertedCurrentDate});
+  if (!isNaN(convertedCurrentDate)) {
+      const convertedCurrentDate = new Date(...dateParts);
+      // console.log(convertedCurrentDate.toDateString());
+      weekDates = [convertedCurrentDate.toDateString()];
+      // let placeholderToDoList = [...toDoList];
+      for (let i=0; i < 6; i++) {
+          const newDate = new Date (weekDates[i]);
+          const nextNewDate = new Date(newDate);
+          nextNewDate.setDate(newDate.getDate() + 1);
+          weekDates = ([...weekDates, nextNewDate.toDateString()]);
+      }
+    } else {
+      weekDates = [selectedDate];
+      // let placeholderToDoList = [...toDoList];
+      for (let i=0; i < 6; i++) {
+          const newDate = new Date (weekDates[i]);
+          const nextNewDate = new Date(newDate);
+          nextNewDate.setDate(newDate.getDate() + 1);
+          weekDates = ([...weekDates, nextNewDate.toDateString()]);
+      }
+
+    }
+    console.log({weekDates});
 
     // start new datesArr
+  //   if (!enteredData) {
 
-      // console.log("item dates", item.dates);
-    let datesArr = [];
-    let dateObj = {};
-    for (let i=0; i<weekDates.length; i++) {
-      let day = weekDates[i];
-      // console.log("weekday Dates", weekDates[i]);
-      // console.log({day});
-      dateObj[day] = {
-        dayGoalTime: 0,
-        dayActualTime: 0,
-        dayDone: false,
-        dayChecked: false
-      }
-      datesArr.push({[day]: dateObj[day]})
-    }
+  //   let datesArr = [];
+  //   let dateObj = {};
+  //   for (let i=0; i<weekDates.length; i++) {
+  //     let day = weekDates[i];
+  //     // console.log("weekday Dates", weekDates[i]);
+  //     // console.log({day});
+  //     dateObj[day] = {
+  //       dayGoalTime: "",
+  //       dayActualTime: "",
+  //       dayNotes: "",
+  //       dayDone: false,
+  //       dayChecked: false
+  //     }
+  //     datesArr.push({[day]: dateObj[day]})
+  //   }
+
+  //   // end new datesArr
+
+
+  //     // console.log({datesArr});
+  //     console.log({datesArr});
+  //     let placeholderToDoList = toDoList.map (item => {
+  //       console.log({item});
+  //       const newItem = {...item, dates: datesArr} // come back to this
+  //       console.log({newItem}); // come back to this
+  //       return newItem;
+  //     })
+  //     setDaysOfWeekArr(deepFreeze(weekDates));
+  //     setToDoList(deepFreeze([...placeholderToDoList]));
+
+  // } // you need to add this back in if you uncomment if (!toDoList.length === 0 || !toDoList[0] || !toDoList[0].dates.length)
+  // else { // if (enteredData)
+
+  // you just commented out this section -- 210306
+    // let datesArr = [];
+    // let dateObj = {};
+    // for (let i=0; i< toDoList.length; i++) {
+    //   const item = toDoList[i];
+    //   const dates = item.dates;
+    //   for (let j=0; j<weekDates.length; j++) {
+    //     const day = weekDates[j];
+    //     dateObj = Object.values(item.dates[j]);
+    //     datesArr.push({[day]: dateObj[day]});
+    //     console.log({datesArr});
+    //   }
+    // }
+      // end of you just commented out this section -- 210306
 
     // end new datesArr
 
 
       // console.log({datesArr});
-      console.log({datesArr});
-      let placeholderToDoList = toDoList.map (item => {
-        console.log({item});
-        const newItem = {...item, dates: datesArr} // come back to this
-        console.log({newItem}); // come back to this
-        return newItem;
+      // console.log({datesArr});
+      let placeholderToDoList = toDoList.map ((item, index) => {
+
+        // for (let i=0; i< toDoList.length; i++) {
+          // const item = toDoList[i];
+          const dates = item.dates;
+          let datesArr = [];
+          let dateObj = {};
+          for (let j=0; j<weekDates.length; j++) {
+            const day = weekDates[j];
+            dateObj = Object.values(item.dates[j])[0];
+            datesArr.push({[day]: dateObj});
+            console.log({datesArr});
+          }
+          const newItem = {...item, dates: datesArr} // come back to this
+          console.log({newItem}); // come back to this
+          return newItem;
+        // }
       })
+        // const newItem = {...item, dates: datesArr} // come back to this
+        // console.log({newItem}); // come back to this
+        // return newItem;
+      // })
+        // console.log({item});
+        // let datesArr = [];
+        // let dateObj = {};
+        // for (let i=0; i<weekDates.length; i++) {
+        //   const newDay = weekDates[i];
+        //   const oldDay = Object.keys(item.dates[i])[0];
+        //   dateObj = {[newDay]: Object.values(item.dates[i])};
+          // dateObj[newDay] = {
+          //   dayGoalTime: item.dates[i][oldDay].dayGoalTime, // this is where things go wrong; also see DayTable, 172
+          //   dayActualTime: item.dates[i][oldDay].dayActualTime,
+          //   dayNotes: item.dates[i][oldDay].dayNotes,
+          //   dayDone: item.dates[i][oldDay].dayDone,
+          //   dayChecked: item.dates[i][oldDay].dayChecked,
+          // }
+      //   const newItem = {...item, dates: datesArr} // come back to this
+      //   console.log({newItem}); // come back to this
+      //   return newItem;
+      // })
       setDaysOfWeekArr(deepFreeze(weekDates));
       setToDoList(deepFreeze([...placeholderToDoList]));
-    }
+  // }
 }, [selectedDate]);
   
-
+// console.log({weekDates});
 
   // useEffect(() => console.log("toDoList from App", {toDoList}));
 
@@ -139,15 +264,15 @@ function App() {
     // console.log(typeof(toDoList));
     let datesArr = [];
     let dateObj = {};
-    // console.log({daysOfWeekArr})
+    console.log({daysOfWeekArr})
     if (daysOfWeekArr.length !== 0) {
       for (let i=0; i < daysOfWeekArr.length; i++) {
         let day = daysOfWeekArr[i];
         // console.log("weekday Dates", weekDates[i]);
         // console.log({day});
         dateObj[day] = {
-          dayGoalTime: 0,
-          dayActualTime: 0,
+          dayGoalTime: "",
+          dayActualTime: "",
           dayNotes: "",
           dayDone: false,
           dayChecked: false
@@ -159,7 +284,7 @@ function App() {
     let newItem = {
       task: "",
       goal: "",
-      actual: null,
+      actual: "",
       dates: datesArr,
       key: taskCounter,
     }
@@ -207,8 +332,8 @@ function handleInsertIconClick(item, index) {
       let day = daysOfWeekArr[i];
       // console.log(day);
       dateObj[day] = {
-        dayGoalTime: 0,
-        dayActualTime: 0,
+        dayGoalTime: "",
+        dayActualTime: "",
         dayNotes: "",
         dayDone: false,
         dayChecked: false

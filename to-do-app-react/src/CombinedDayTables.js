@@ -20,7 +20,8 @@ function deepFreeze (o) {
 
 
 export default function CombinedDayTables(props) {
-    const {selectedDate, toDoList, setToDoList, daysOfWeekArr, setDaysOfWeekArr} = props;
+    const {selectedDate, toDoList, setToDoList, daysOfWeekArr, setDaysOfWeekArr, weekDates} = props;
+
 
     return (
         <>

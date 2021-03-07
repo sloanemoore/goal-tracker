@@ -70,6 +70,8 @@ export default function DayTable(props) {
     ));
 }
 
+console.log("toDoList from DayTable: ", {toDoList});
+
 
     function handleActualEdit (event, key, currentDate) {
         let placeholderToDoList;
@@ -84,7 +86,7 @@ export default function DayTable(props) {
                         const day = Object.keys(item.dates[i])[0];
                         if (day === currentDate) {
                             const dateItem = {...item.dates[i][day]};
-                            const newDayDone = newActualTime > dateItem.dayGoalTime; // this is the line I changed most recently
+                            const newDayDone = newActualTime >= dateItem.dayGoalTime; // this is the line I changed most recently
                             const updatedDateItem = {...dateItem, dayActualTime: newActualTime, dayDone: newDayDone}; // I changed this line, too
                             const newDates = [...item.dates];
                             newDates[i] = {[day]: updatedDateItem};
@@ -137,7 +139,7 @@ export default function DayTable(props) {
 
     
     return (
-        <>
+        <div>
         <table>
             <thead>
                 <tr>
@@ -163,20 +165,20 @@ export default function DayTable(props) {
             <tbody>
                 {toDoList.map(item => {
                         const key = item.key;
-                        const dayGoalTime = "";
-                        const dayActualTime = "";
+                        // const day = Object.keys(item.dates[index])[0];
                         return <tr key={item.key}>
                             <td className="taskEntry dailyTaskItem">
                                 {item.task}
                             </td>
                             <td>
-                                <span><input type="text" placeholder="Enter time in min" defaultValue={dayGoalTime} onChange={(event) => handleGoalEdit(event, key, currentDate)}/></span>
+                                <span><input type="text" placeholder="Enter time in min" value={item.dates[index][currentDate].dayGoalTime} onChange={(event) => handleGoalEdit(event, key, currentDate)}/></span>
                             </td>
                             <td>
-                                <span><input type="text" placeholder="Enter time in min" defaultValue={dayActualTime} onChange={(event) => handleActualEdit(event, key, currentDate)}/></span>
+                                <span><input type="text" placeholder="Enter time in min" value={item.dates[index][currentDate].dayActualTime} onChange={(event) => handleActualEdit(event, key, currentDate)}/></span>
                             </td>
                             <td>
-                                {item.dates[index][currentDate].dayActualTime!=="" && item.dates[index][currentDate].dayGoalTime!== 0 && item.dates[index][currentDate].dayActualTime >= item.dates[index][currentDate].dayGoalTime && <label className="container"><input type="checkbox" onClick={(event) => handleCheckboxClick(event, key, currentDate)}/><span className="checkmark"></span></label>}
+                                {/* {item.dates[index][currentDate].dayDone && <label className="container"><input type="checkbox" checked={item.dates[index][currentDate].dayChecked} onClick={(event) => handleCheckboxClick(event, key, currentDate)}/><span className="checkmark"></span></label>} */}
+                                {item.dates[index][currentDate].dayActualTime!=="" && item.dates[index][currentDate].dayGoalTime!== 0 && item.dates[index][currentDate].dayActualTime >= item.dates[index][currentDate].dayGoalTime && <label className="container"><input type="checkbox" checked={item.dates[index][currentDate].dayChecked} onChange={(event) => handleCheckboxClick(event, key, currentDate)}/><span className="checkmark"></span></label>}
                             </td>
                         </tr>}
                     )}
@@ -184,6 +186,6 @@ export default function DayTable(props) {
             </tbody>
         </table>
         <span className="error">{errorMessage}</span>
-        </>
+        </div>
     )
 }
