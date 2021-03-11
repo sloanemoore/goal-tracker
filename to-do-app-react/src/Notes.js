@@ -58,10 +58,10 @@ export default function Notes(props) {
 
     return (
         <>
-        <table>
+        <table className="tableBlock">
             <thead>
                 <tr>
-                <th className="rowHighlight" colSpan="4">
+                <th className="rowHighlight">
                         Notes
                     </th>
                 </tr>
@@ -89,3 +89,39 @@ export default function Notes(props) {
         </>
     )
 }
+
+
+//     return (
+//         <>
+//         <div className="flexSide">
+//         {toDoList.map(item => {
+//                         const key = item.key;
+//                         const day = Object.keys(item.dates[index])[0];
+//                         // console.log({key})
+
+//                         return(
+//                             <table>
+//                                 <thead>
+//                                     <tr>
+//                                     <th className="rowHighlight">
+//                                             Notes
+//                                         </th>
+//                                     </tr>
+//                                     <tr>
+//                                         <td className="taskEntry">
+//                                             Task Details
+//                                         </td>
+//                                 </tr>
+//                                 </thead>
+//                                     <tbody>
+//                                             <tr key={key}>
+//                                                 <td className="notesEntry">
+//                                                     <span><input type="text" placeholder="Add a note" value={item.dates[index][currentDate].dayNotes} key={key} onChange={(event) => handleNotesEdit(event, key)}/></span>
+//                                                 </td>
+//                                             </tr>
+//                                     </tbody>
+//                             </table>)})}
+//                     </div>
+//                     </>
+//     )
+// }

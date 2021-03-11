@@ -15,12 +15,22 @@ td {
   color: #333333;
 }
 
-table {
+.weekTable {
   display: table;
   margin-top: 40px;
   margin-bottom: 30px;
   margin-left: auto;
   margin-right: auto;
+  text-align: left;
+  border-collapse: collapse;
+}
+
+.tableBlock {
+  display: table;
+  margin-top: 40px;
+  margin-bottom: 30px;
+  margin-left: 30px;
+  margin-right: 30px;
   text-align: left;
   border-collapse: collapse;
 }
@@ -139,16 +149,14 @@ input[type="text"]:disabled {
 
 .flexContainer {
   display: flex;
+  justify-content: center;
+  /* margin-left: 60px;
+  margin-right: 60px; */
+}
+
+.flexBlock {
   margin-left: 60px;
   margin-right: 60px;
-}
-
-.flexMain {
-  flex: 3;
-}
-
-.flexSide {
-  flex: 1;
 }
 
 /* This is the checkmark */

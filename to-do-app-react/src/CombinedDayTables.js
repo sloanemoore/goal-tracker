@@ -29,8 +29,8 @@ export default function CombinedDayTables(props) {
             return (
             <>
             <div className="flexContainer">
-                <DayTable className="flexMain" currentDate={day} index={i} toDoList={toDoList} setToDoList={setToDoList}/>
-                <Notes className="flexSide" currentDate={day} index={i} toDoList={toDoList} setToDoList={setToDoList}/>
+                <DayTable className="flexBlock" currentDate={day} index={i} toDoList={toDoList} setToDoList={setToDoList}/>
+                <Notes className="flexBlock" currentDate={day} index={i} toDoList={toDoList} setToDoList={setToDoList}/>
             </div>
             </>
             )

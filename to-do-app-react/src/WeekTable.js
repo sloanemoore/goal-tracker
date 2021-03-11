@@ -30,7 +30,7 @@ export default function WeekTable(props) {
 
     return (
         <>
-        <table>
+        <table className="weekTable">
             <thead>
                 <tr>
                     <th className="noTableBorder"></th>
