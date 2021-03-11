@@ -1,22 +1,5 @@
 import React, { useState, useEffect } from "react";
 
-// you'll need to include this function into all components
-function deepFreeze(o) {
-  Object.freeze(o);
-
-  Object.getOwnPropertyNames(o).forEach(function (prop) {
-    if (
-      o.hasOwnProperty(prop) &&
-      o[prop] !== null &&
-      (typeof o[prop] === "object" || typeof o[prop] === "function") &&
-      !Object.isFrozen(o[prop])
-    ) {
-      deepFreeze(o[prop]);
-    }
-  });
-
-  return o;
-}
 
 export default function DayTable(props) {
   const [errorMessage, setErrorMessage] = useState("");
@@ -44,10 +27,10 @@ export default function DayTable(props) {
           return item;
         }
       });
-      setToDoList(deepFreeze(placeholderToDoList));
-      return setErrorMessage(deepFreeze("Please enter a valid number"));
+      setToDoList(placeholderToDoList);
+      return setErrorMessage("Please enter a valid number");
     } else {
-      setErrorMessage(deepFreeze(""));
+      setErrorMessage("");
       const newGoalTime = Number(event.target.value);
       placeholderToDoList = toDoList.map((item) => {
         if (item.key === key) {
@@ -75,7 +58,6 @@ export default function DayTable(props) {
       });
     }
     setToDoList(
-      deepFreeze(
         placeholderToDoList.map((item) => {
           if (item.key === key) {
             let tempGoalTotal = 0;
@@ -90,7 +72,6 @@ export default function DayTable(props) {
             return item;
           }
         })
-      )
     );
   }
 
@@ -120,11 +101,11 @@ export default function DayTable(props) {
           return item;
         }
       });
-      setToDoList(deepFreeze(placeholderToDoList));
-      return setErrorMessage(deepFreeze("Please enter a valid number"));
+      setToDoList(placeholderToDoList);
+      return setErrorMessage("Please enter a valid number");
     } else {
       const newActualTime = Number(event.target.value);
-      setErrorMessage(deepFreeze(""));
+      setErrorMessage("");
       placeholderToDoList = toDoList.map((item) => {
         if (item.key === key) {
           for (let i = 0; i < item.dates.length; i++) {
@@ -151,7 +132,6 @@ export default function DayTable(props) {
       });
     }
     setToDoList(
-      deepFreeze(
         placeholderToDoList.map((item) => {
           if (item.key === key) {
             let tempActualTotal = 0;
@@ -166,7 +146,6 @@ export default function DayTable(props) {
             return item;
           }
         })
-      )
     );
   }
 
@@ -191,7 +170,7 @@ export default function DayTable(props) {
         return item;
       }
     });
-    setToDoList(deepFreeze(placeholderToDoList));
+    setToDoList(placeholderToDoList);
   }
 
   return (

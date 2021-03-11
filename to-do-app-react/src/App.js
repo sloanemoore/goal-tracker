@@ -5,21 +5,6 @@ import Header from "./Header.js";
 import WeekTable from "./WeekTable.js";
 import CombinedDayTables from "./CombinedDayTables.js";
 
-// you'll need to include this function into all components
-function deepFreeze (o) {
-  Object.freeze(o);
-
-  Object.getOwnPropertyNames(o).forEach(function (prop) {
-    if (o.hasOwnProperty(prop)
-    && o[prop] !== null
-    && (typeof o[prop] === "object" || typeof o[prop] === "function")
-    && !Object.isFrozen(o[prop])) {
-      deepFreeze(o[prop]);
-    }
-  });
-  
-  return o;
-};
 
 
 function App() {
@@ -115,13 +100,13 @@ function App() {
           console.log({newItem}); // come back to this
           return newItem;
         })
-      setDaysOfWeekArr(deepFreeze(weekDates));
-      setToDoList(deepFreeze([...placeholderToDoList]));
+      setDaysOfWeekArr(weekDates);
+      setToDoList([...placeholderToDoList]);
 }, [selectedDate]);
   
 
   function handleSelectedDateChange(event) {
-    setSelectedDate(deepFreeze(event.target.value));
+    setSelectedDate(event.target.value);
   }
 
 
@@ -150,8 +135,8 @@ function App() {
       dates: datesArr,
       key: taskCounter,
     }
-    setToDoList(deepFreeze([...toDoList, newItem]));
-    setTaskCounter(deepFreeze(prevCounter => prevCounter + 1));
+    setToDoList([...toDoList, newItem]);
+    setTaskCounter(prevCounter => prevCounter + 1);
 }
 
 
@@ -165,12 +150,12 @@ function handleEditTask(event, key) {
         return item;
       }
     });
-  setToDoList(deepFreeze(placeholderToDoList));
+  setToDoList(placeholderToDoList);
   }
 
 
 function handleDeleteIconClick(itemToDelete) {
-  setToDoList(deepFreeze(toDoList.filter(item => item.key !== itemToDelete.key)));
+  setToDoList(toDoList.filter(item => item.key !== itemToDelete.key));
 }
 
 
@@ -214,8 +199,8 @@ function handleInsertIconClick(item, index) {
       } else {
         continue;
       };
-    setToDoList(deepFreeze(placeholderToDoList));
-    setTaskCounter(deepFreeze(prevCounter => prevCounter + 1));
+    setToDoList(placeholderToDoList);
+    setTaskCounter(prevCounter => prevCounter + 1);
   }
 }
 
