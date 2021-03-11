@@ -23,26 +23,20 @@ export default function DayTable(props) {
 
   const { currentDate, toDoList, setToDoList, index } = props;
 
-  console.log("currentDate from DayTable: ", currentDate);
-
   function handleGoalEdit(event, key, currentDate) {
     let placeholderToDoList;
     if (isNaN(Number(event.target.value))) {
-      // start fix to error warning
       const newGoalTime = event.target.value;
-      console.log({ newGoalTime });
       placeholderToDoList = toDoList.map((item) => {
         if (item.key === key) {
           for (let i = 0; i < item.dates.length; i++) {
             const day = Object.keys(item.dates[i])[0];
             if (day === currentDate) {
               const dateItem = { ...item.dates[i][day] };
-              const updatedDateItem = { ...dateItem, dayGoalTime: newGoalTime }; // I changed this line, too
-              console.log({ updatedDateItem });
+              const updatedDateItem = { ...dateItem, dayGoalTime: newGoalTime };
               const newDates = [...item.dates];
               newDates[i] = { [day]: updatedDateItem };
               const newItem = { ...item, dates: newDates };
-              console.log({ newItem });
               return newItem;
             }
           }
@@ -51,26 +45,24 @@ export default function DayTable(props) {
         }
       });
       setToDoList(deepFreeze(placeholderToDoList));
-      // end fix to error warning
       return setErrorMessage(deepFreeze("Please enter a valid number"));
     } else {
       setErrorMessage(deepFreeze(""));
-      // added this line to fix error message
       const newGoalTime = Number(event.target.value);
-      // end of adde line to fix error message
       placeholderToDoList = toDoList.map((item) => {
         if (item.key === key) {
           for (let i = 0; i < item.dates.length; i++) {
             const day = Object.keys(item.dates[i])[0];
             if (day === currentDate) {
               const dateItem = { ...item.dates[i][day] };
-              const newDayDone = dateItem.dayActualTime > dateItem.newGoalTime; // this is the line I changed most recently
+              const newDayDone = dateItem.dayActualTime > dateItem.newGoalTime;
+              const newDayChecked = dateItem.dayActualTime > dateItem.newGoalTime ? dateItem.dayChecked : false; // changed this line
               const updatedDateItem = {
                 ...dateItem,
                 dayGoalTime: newGoalTime,
                 dayDone: newDayDone,
-              }; // I changed this line, too
-              console.log({ updatedDateItem });
+                dayChecked: newDayChecked // changed this line
+              }; 
               const newDates = [...item.dates];
               newDates[i] = { [day]: updatedDateItem };
               const newItem = { ...item, dates: newDates };
@@ -102,16 +94,12 @@ export default function DayTable(props) {
     );
   }
 
-  console.log("toDoList from DayTable: ", { toDoList });
-
   function handleActualEdit(event, key, currentDate) {
     let placeholderToDoList;
     const newActualTime = Number(event.target.value);
     if (isNaN(Number(event.target.value))) {
       const newActualTime = event.target.value;
 
-      // start fix to error warning
-      console.log({ newActualTime });
       placeholderToDoList = toDoList.map((item) => {
         if (item.key === key) {
           for (let i = 0; i < item.dates.length; i++) {
@@ -121,12 +109,10 @@ export default function DayTable(props) {
               const updatedDateItem = {
                 ...dateItem,
                 dayActualTime: newActualTime,
-              }; // I changed this line, too
-              console.log({ updatedDateItem });
+              };
               const newDates = [...item.dates];
               newDates[i] = { [day]: updatedDateItem };
               const newItem = { ...item, dates: newDates };
-              console.log({ newItem });
               return newItem;
             }
           }
@@ -135,7 +121,6 @@ export default function DayTable(props) {
         }
       });
       setToDoList(deepFreeze(placeholderToDoList));
-      // end fix to error warning
       return setErrorMessage(deepFreeze("Please enter a valid number"));
     } else {
       const newActualTime = Number(event.target.value);
@@ -146,12 +131,14 @@ export default function DayTable(props) {
             const day = Object.keys(item.dates[i])[0];
             if (day === currentDate) {
               const dateItem = { ...item.dates[i][day] };
-              const newDayDone = newActualTime >= dateItem.dayGoalTime; // this is the line I changed most recently
+              const newDayDone = newActualTime >= dateItem.dayGoalTime; 
+              const newDayChecked = newActualTime >= dateItem.dayGoalTime ? dateItem.dayChecked : false; // changed this line
               const updatedDateItem = {
                 ...dateItem,
                 dayActualTime: newActualTime,
                 dayDone: newDayDone,
-              }; // I changed this line, too
+                dayChecked: newDayChecked // changed this line
+              };
               const newDates = [...item.dates];
               newDates[i] = { [day]: updatedDateItem };
               const newItem = { ...item, dates: newDates };
@@ -207,8 +194,6 @@ export default function DayTable(props) {
     setToDoList(deepFreeze(placeholderToDoList));
   }
 
-  // end fix to persist error message
-
   return (
     <div>
       <table className="tableBlock">
@@ -228,7 +213,7 @@ export default function DayTable(props) {
         <tbody>
           {toDoList.map((item) => {
             const key = item.key;
-            // const day = Object.keys(item.dates[index])[0];
+
             return (
               <tr key={item.key}>
                 <td className="taskEntry dailyTaskItem">{item.task}</td>
@@ -257,7 +242,6 @@ export default function DayTable(props) {
                   </span>
                 </td>
                 <td>
-                  {/* {item.dates[index][currentDate].dayDone && <label className="container"><input type="checkbox" checked={item.dates[index][currentDate].dayChecked} onClick={(event) => handleCheckboxClick(event, key, currentDate)}/><span className="checkmark"></span></label>} */}
                   {item.dates[index][currentDate].dayActualTime !== "" &&
                   !isNaN(item.dates[index][currentDate].dayActualTime) &&
                     item.dates[index][currentDate].dayGoalTime !== 0 &&
@@ -297,66 +281,3 @@ export default function DayTable(props) {
     </div>
   );
 }
-
-// return (
-//     <div className="flexMain">
-//     {toDoList.map(item => {
-//                     const key = item.key;
-//                     // console.log({currentDate});
-//                     let invalidDayGoalTime = isNaN(item.dates[index][currentDate].dayGoalTime) && (item.dates[index][currentDate].dayGoalTime);
-//                     // console.log({invalidDayGoalTime});
-//                     let invalidDayActualTime = isNaN(item.dates[index][currentDate].dayActualTime) && (item.dates[index][currentDate].dayActualTime);
-//                     // console.log({invalidDayActualTime});
-//                     // console.log("dayGoalTime: ", item.dates[index][currentDate].dayGoalTime);
-//                     // console.log("dayGoalTime is NaN", isNaN(item.dates[index][currentDate].dayGoalTime));
-//                     // console.log("dayGoalTime is undefined", !(item.dates[index][currentDate].dayGoalTime));
-//                     // console.log("dayActualTime: ", item.dates[index][currentDate].dayActualTime);
-//                     // console.log("dayActualTime is NaN",isNaN(item.dates[index][currentDate].dayActualTime));
-//                     // console.log("dayActualTime is undefined", !(item.dates[index][currentDate].dayGoalTime));
-//                     // const day = Object.keys(item.dates[index])[0];
-//                     return  (
-//                     <>
-//                     <table>
-//                     <thead>
-//                         <tr>
-//                             <th className="rowHighlight" colSpan="4">
-//                                 {currentDate}
-//                             </th>
-//                         </tr>
-//                         <tr>
-//                             <td className="taskEntry">
-//                                 Task
-//                             </td>
-//                             <td>
-//                                 Goal (in min.)
-//                             </td>
-//                             <td>
-//                                 Actual (in min.)
-//                             </td>
-//                             <td>
-//                                 Done
-//                             </td>
-//                         </tr>
-//                     </thead>
-//                     <tbody>
-//                     <tr key={item.key}>
-//                         <td className="taskEntry dailyTaskItem">
-//                             {item.task}
-//                         </td>
-//                         <td>
-//                             <span><input type="text" placeholder="Enter time in min" value={item.dates[index][currentDate].dayGoalTime} onChange={(event) => handleGoalEdit(event, key, currentDate)}/></span>
-//                         </td>
-//                         <td>
-//                             <span><input type="text" placeholder="Enter time in min" value={item.dates[index][currentDate].dayActualTime} onChange={(event) => handleActualEdit(event, key, currentDate)}/></span>
-//                         </td>
-//                         <td>
-//                             {/* {item.dates[index][currentDate].dayDone && <label className="container"><input type="checkbox" checked={item.dates[index][currentDate].dayChecked} onClick={(event) => handleCheckboxClick(event, key, currentDate)}/><span className="checkmark"></span></label>} */}
-//                             {item.dates[index][currentDate].dayActualTime!=="" && !isNaN(item.dates[index][currentDate].dayActualTime) && item.dates[index][currentDate].dayGoalTime!== 0 && item.dates[index][currentDate].dayActualTime >= item.dates[index][currentDate].dayGoalTime && <label className="container"><input type="checkbox" checked={item.dates[index][currentDate].dayChecked} onChange={(event) => handleCheckboxClick(event, key, currentDate)}/><span className="checkmark"></span></label>}
-//                         </td>
-//                     </tr>
-//                     </tbody>
-//                 </table>
-//     {invalidDayGoalTime && <div><span className="error">Please enter a valid goal time.</span></div>}
-//     {invalidDayActualTime && <div><span className="error">Please enter a valid actual time.</span></div>}
-//     </>)})}
-//     </div>)}

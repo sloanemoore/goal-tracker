@@ -29,11 +29,7 @@ export default function Notes(props) {
         let placeholderToDoList;
         const newNotes = event.target.value;
         placeholderToDoList = toDoList.map(item => {
-            // console.log({key});
-            // console.log("item.key: ", item.key);
-            // console.log({newNotes});
             if (item.key === key) {
-                // console.log(key===item.key);
                 for (let i=0; i<item.dates.length; i++) {
                     const day = Object.keys(item.dates[i])[0];
                     console.log("day: ", day);
@@ -75,8 +71,6 @@ export default function Notes(props) {
                     {toDoList.map(item => {
                         const key = item.key;
                         const day = Object.keys(item.dates[index])[0];
-                        // console.log({key})
-
                         return <tr key={key}>
                             <td className="notesEntry">
                                 <span><input type="text" placeholder="Add a note" value={item.dates[index][currentDate].dayNotes} key={key} onChange={(event) => handleNotesEdit(event, key)}/></span>
@@ -89,39 +83,3 @@ export default function Notes(props) {
         </>
     )
 }
-
-
-//     return (
-//         <>
-//         <div className="flexSide">
-//         {toDoList.map(item => {
-//                         const key = item.key;
-//                         const day = Object.keys(item.dates[index])[0];
-//                         // console.log({key})
-
-//                         return(
-//                             <table>
-//                                 <thead>
-//                                     <tr>
-//                                     <th className="rowHighlight">
-//                                             Notes
-//                                         </th>
-//                                     </tr>
-//                                     <tr>
-//                                         <td className="taskEntry">
-//                                             Task Details
-//                                         </td>
-//                                 </tr>
-//                                 </thead>
-//                                     <tbody>
-//                                             <tr key={key}>
-//                                                 <td className="notesEntry">
-//                                                     <span><input type="text" placeholder="Add a note" value={item.dates[index][currentDate].dayNotes} key={key} onChange={(event) => handleNotesEdit(event, key)}/></span>
-//                                                 </td>
-//                                             </tr>
-//                                     </tbody>
-//                             </table>)})}
-//                     </div>
-//                     </>
-//     )
-// }
