@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 
-
 export default function DayTable(props) {
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -39,13 +38,16 @@ export default function DayTable(props) {
             if (day === currentDate) {
               const dateItem = { ...item.dates[i][day] };
               const newDayDone = dateItem.dayActualTime > dateItem.newGoalTime;
-              const newDayChecked = dateItem.dayActualTime > dateItem.newGoalTime ? dateItem.dayChecked : false; // changed this line
+              const newDayChecked =
+                dateItem.dayActualTime > dateItem.newGoalTime
+                  ? dateItem.dayChecked
+                  : false; // changed this line
               const updatedDateItem = {
                 ...dateItem,
                 dayGoalTime: newGoalTime,
                 dayDone: newDayDone,
-                dayChecked: newDayChecked // changed this line
-              }; 
+                dayChecked: newDayChecked, // changed this line
+              };
               const newDates = [...item.dates];
               newDates[i] = { [day]: updatedDateItem };
               const newItem = { ...item, dates: newDates };
@@ -58,20 +60,20 @@ export default function DayTable(props) {
       });
     }
     setToDoList(
-        placeholderToDoList.map((item) => {
-          if (item.key === key) {
-            let tempGoalTotal = 0;
-            for (let i = 0; i < item.dates.length; i++) {
-              const day = Object.keys(item.dates[i])[0];
-              const dayGT = Number(item.dates[i][day].dayGoalTime);
-              tempGoalTotal += Number(item.dates[i][day].dayGoalTime);
-            }
-            const updatedItem = { ...item, goal: tempGoalTotal };
-            return updatedItem;
-          } else {
-            return item;
+      placeholderToDoList.map((item) => {
+        if (item.key === key) {
+          let tempGoalTotal = 0;
+          for (let i = 0; i < item.dates.length; i++) {
+            const day = Object.keys(item.dates[i])[0];
+            const dayGT = Number(item.dates[i][day].dayGoalTime);
+            tempGoalTotal += Number(item.dates[i][day].dayGoalTime);
           }
-        })
+          const updatedItem = { ...item, goal: tempGoalTotal };
+          return updatedItem;
+        } else {
+          return item;
+        }
+      })
     );
   }
 
@@ -112,13 +114,16 @@ export default function DayTable(props) {
             const day = Object.keys(item.dates[i])[0];
             if (day === currentDate) {
               const dateItem = { ...item.dates[i][day] };
-              const newDayDone = newActualTime >= dateItem.dayGoalTime; 
-              const newDayChecked = newActualTime >= dateItem.dayGoalTime ? dateItem.dayChecked : false; // changed this line
+              const newDayDone = newActualTime >= dateItem.dayGoalTime;
+              const newDayChecked =
+                newActualTime >= dateItem.dayGoalTime
+                  ? dateItem.dayChecked
+                  : false; // changed this line
               const updatedDateItem = {
                 ...dateItem,
                 dayActualTime: newActualTime,
                 dayDone: newDayDone,
-                dayChecked: newDayChecked // changed this line
+                dayChecked: newDayChecked, // changed this line
               };
               const newDates = [...item.dates];
               newDates[i] = { [day]: updatedDateItem };
@@ -132,20 +137,20 @@ export default function DayTable(props) {
       });
     }
     setToDoList(
-        placeholderToDoList.map((item) => {
-          if (item.key === key) {
-            let tempActualTotal = 0;
-            for (let i = 0; i < item.dates.length; i++) {
-              const day = Object.keys(item.dates[i])[0];
-              const dayAT = Number(item.dates[i][day].dayActualTime);
-              tempActualTotal += Number(item.dates[i][day].dayActualTime);
-            }
-            const updatedItem = { ...item, actual: tempActualTotal };
-            return updatedItem;
-          } else {
-            return item;
+      placeholderToDoList.map((item) => {
+        if (item.key === key) {
+          let tempActualTotal = 0;
+          for (let i = 0; i < item.dates.length; i++) {
+            const day = Object.keys(item.dates[i])[0];
+            const dayAT = Number(item.dates[i][day].dayActualTime);
+            tempActualTotal += Number(item.dates[i][day].dayActualTime);
           }
-        })
+          const updatedItem = { ...item, actual: tempActualTotal };
+          return updatedItem;
+        } else {
+          return item;
+        }
+      })
     );
   }
 
@@ -222,7 +227,7 @@ export default function DayTable(props) {
                 </td>
                 <td>
                   {item.dates[index][currentDate].dayActualTime !== "" &&
-                  !isNaN(item.dates[index][currentDate].dayActualTime) &&
+                    !isNaN(item.dates[index][currentDate].dayActualTime) &&
                     item.dates[index][currentDate].dayGoalTime !== 0 &&
                     !isNaN(item.dates[index][currentDate].dayGoalTime) &&
                     item.dates[index][currentDate].dayActualTime >=
@@ -252,10 +257,20 @@ export default function DayTable(props) {
         let invalidDayActualTime =
           isNaN(item.dates[index][currentDate].dayActualTime) &&
           item.dates[index][currentDate].dayActualTime;
-        return <>
-        {invalidDayGoalTime && <div><span className="error">Please enter a valid goal time.</span></div>}
-        {invalidDayActualTime && <div><span className="error">Please enter a valid actual time.</span></div>}
-            </>;
+        return (
+          <>
+            {invalidDayGoalTime && (
+              <div>
+                <span className="error">Please enter a valid goal time.</span>
+              </div>
+            )}
+            {invalidDayActualTime && (
+              <div>
+                <span className="error">Please enter a valid actual time.</span>
+              </div>
+            )}
+          </>
+        );
       })}
     </div>
   );
