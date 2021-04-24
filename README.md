@@ -23,3 +23,5 @@ The Day Tables show you the tasks you need to complete each day.
 There is also a notes section for each Day Table where you can add information. I use this section to note what I accomplished during my session.
 
 The entire task table is stored in local storage so you can refer to your tasks every day.
+
+You can view this project <a href="https://nowcodethis.netlify.app/">here</a>
