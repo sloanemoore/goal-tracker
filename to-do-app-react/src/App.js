@@ -105,10 +105,8 @@ function App() {
         const day = weekDates[j];
         dateObj = Object.values(item.dates[j])[0];
         datesArr.push({ [day]: dateObj });
-        console.log({ datesArr });
       }
-      const newItem = { ...item, dates: datesArr }; // come back to this
-      console.log({ newItem }); // come back to this
+      const newItem = { ...item, dates: datesArr };
       return newItem;
     });
     setDaysOfWeekArr(weekDates);
@@ -122,7 +120,6 @@ function App() {
   function handleAddNewRowClick() {
     let datesArr = [];
     let dateObj = {};
-    console.log({ daysOfWeekArr });
     if (daysOfWeekArr.length !== 0) {
       for (let i = 0; i < daysOfWeekArr.length; i++) {
         let day = daysOfWeekArr[i];
@@ -191,8 +188,6 @@ function App() {
     };
     let placeholderToDoList;
     for (let i = 0; i < toDoList.length; i++) {
-      console.log({ i });
-      console.log({ insertIndex });
       if (insertIndex === 0) {
         placeholderToDoList = [newItem, ...toDoList];
       } else if (insertIndex === i) {
