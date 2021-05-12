@@ -198,8 +198,6 @@ function App() {
       } else if (insertIndex === i) {
         const firstPart = toDoList.slice(0, insertIndex);
         const secondPart = toDoList.slice(insertIndex);
-        console.log({ firstPart });
-        console.log({ secondPart });
         placeholderToDoList = [...firstPart, newItem, ...secondPart];
       } else {
         continue;
