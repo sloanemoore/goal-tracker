@@ -2,7 +2,7 @@
 
 The goal tracker creates a weekly planner that you can customize with the daily tasks you want to complete.
 
-![Goal Tracker App Screenshot](screenshots/goal-tracker-app.png "Goal Tracker App Screenshot")
+<a href="https://nowcodethis.netlify.app/">![Goal Tracker App Screenshot](screenshots/goal-tracker-app.png "Goal Tracker App Screenshot")</a>
 
 It works like this:
 
