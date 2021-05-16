@@ -2,6 +2,8 @@
 
 The goal tracker creates a weekly planner that you can customize with the daily tasks you want to complete.
 
+![Goal Tracker App Screenshot](screenshots/goal-tracker-app.png "Goal Tracker App Screenshot")
+
 It works like this:
 
 At the top of the page, you can enter the 7-day week that you want to track. The tracker will default to the current date, but you can select any date you want with the date picker.
