@@ -204,7 +204,7 @@ function App() {
 
   return (
     <div className="App">
-      <h1>To Do App</h1>
+      <h1>Goal Tracker</h1>
       <Header
         selectedDate={selectedDate}
         onSelectedDateChange={handleSelectedDateChange}
